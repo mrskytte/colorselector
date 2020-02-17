@@ -16,21 +16,27 @@ let selectedColor;
 // Initialize code
 function init() {
   const colorPicker = document.querySelector("#colorpicker");
-  colorPicker.addEventListener("input", getColor);
+  colorPicker.addEventListener("input", changeColor);
+}
+
+function changeColor() {
+  let HEXValue = getColorValues(this);
+  showColor(HEXValue);
 }
 
 // Get color data
-function getColor() {
-  selectedColor = this.value;
-  calcRGB();
+function getColorValues(thisColor) {
+  const HEXValue = thisColor.value;
+  calcRGB(HEXValue);
   calcHSL(rgbObject.r, rgbObject.g, rgbObject.b);
+  return HEXValue;
 }
 
 // Calculate RGB value
-function calcRGB() {
-  rgbObject.r = parseInt(selectedColor.substring(1, 3), 16);
-  rgbObject.g = parseInt(selectedColor.substring(3, 5), 16);
-  rgbObject.b = parseInt(selectedColor.substring(5, 7), 16);
+function calcRGB(HEX) {
+  rgbObject.r = parseInt(HEX.substring(1, 3), 16);
+  rgbObject.g = parseInt(HEX.substring(3, 5), 16);
+  rgbObject.b = parseInt(HEX.substring(5, 7), 16);
 }
 
 // Calculate HSL value
@@ -71,14 +77,45 @@ function calcHSL(r, g, b) {
   hslObject.h = h;
   hslObject.s = s;
   hslObject.l = l;
+}
 
-  console.log(hslObject);
+function showColor(HEXValue) {
+  showNewColor(HEXValue);
+  showNewHEXValue(HEXValue);
+  showNewRBGValue();
+  showNewHSLValue();
 }
 
 // Show new color
+function showNewColor(HEX) {
+  const colorbox = document.querySelector("#colorbox");
+  colorbox.style.setProperty("--color", HEX);
+}
 
 // Show new HEX value
+function showNewHEXValue(HEX) {
+  const hexValue = document.querySelector("#hexvalue");
+  hexValue.textContent = HEX.toUpperCase();
+}
 
 // Show new RBG value
+function showNewRBGValue() {
+  const rValue = document.querySelector("#rValue");
+  const gValue = document.querySelector("#gValue");
+  const bValue = document.querySelector("#bValue");
+
+  rValue.textContent = rgbObject.r;
+  gValue.textContent = rgbObject.g;
+  bValue.textContent = rgbObject.b;
+}
 
 // Show new HSL value
+function showNewHSLValue() {
+  const hValue = document.querySelector("#hValue");
+  const sValue = document.querySelector("#sValue");
+  const lValue = document.querySelector("#lValue");
+
+  hValue.textContent = Math.round(hslObject.h);
+  sValue.textContent = Math.round(hslObject.s) + "%";
+  lValue.textContent = Math.round(hslObject.l) + "%";
+}
