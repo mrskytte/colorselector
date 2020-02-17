@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#container {
+  margin: 2rem auto auto 5rem;
+  width: 10rem;
+  height: auto;
+  background-color: gainsboro;
+  border-radius: 0.5rem;
+  padding: 0.3rem;
+}
+
+#colorbox {
+  --color: red;
+  width: 100%;
+  height: 6rem;
+  background-color: var(--color);
+  margin: 4px 0 4px 0;
+  border-radius: inherit;
+}
+
+#colorpickercontainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+#colorcodecontainer {
+  display: grid;
+  grid-template-columns: 1fr 1.8fr;
+  font-size: 0.9rem;
+}
+
+.colorcodes {
+  display: flex;
+  justify-content: space-between;
+}
