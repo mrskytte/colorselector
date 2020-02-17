@@ -1,18 +1,7 @@
 "use strict";
 
 window.addEventListener("DOMContentLoaded", init);
-const rgbObject = {
-  r: 0,
-  g: 0,
-  b: 0
-};
-const hslObject = {
-  h: 0,
-  s: 0,
-  l: 0
-};
 
-let selectedColor;
 // Initialize code
 function init() {
   const colorPicker = document.querySelector("#colorpicker");
@@ -20,23 +9,34 @@ function init() {
 }
 
 function changeColor() {
-  let HEXValue = getColorValues(this);
-  showColor(HEXValue);
+  const colorValues = getColorValues(this);
+  showColor(colorValues);
 }
 
 // Get color data
 function getColorValues(thisColor) {
-  const HEXValue = thisColor.value;
-  calcRGB(HEXValue);
-  calcHSL(rgbObject.r, rgbObject.g, rgbObject.b);
-  return HEXValue;
+  const hexValue = thisColor.value;
+  const rgbObject = calcRGB(hexValue);
+  const hslObject = calcHSL(rgbObject.r, rgbObject.g, rgbObject.b);
+  const colorValues = {
+    hex: hexValue,
+    rgb: rgbObject,
+    hsl: hslObject
+  };
+  return colorValues;
 }
 
 // Calculate RGB value
-function calcRGB(HEX) {
-  rgbObject.r = parseInt(HEX.substring(1, 3), 16);
-  rgbObject.g = parseInt(HEX.substring(3, 5), 16);
-  rgbObject.b = parseInt(HEX.substring(5, 7), 16);
+function calcRGB(hex) {
+  let rgbObject = {
+    r: 0,
+    g: 0,
+    b: 0
+  };
+  rgbObject.r = parseInt(hex.substring(1, 3), 16);
+  rgbObject.g = parseInt(hex.substring(3, 5), 16);
+  rgbObject.b = parseInt(hex.substring(5, 7), 16);
+  return rgbObject;
 }
 
 // Calculate HSL value
@@ -74,48 +74,51 @@ function calcHSL(r, g, b) {
   s *= 100;
   l *= 100;
 
-  hslObject.h = h;
-  hslObject.s = s;
-  hslObject.l = l;
+  const hslObject = {
+    h: h,
+    s: s,
+    l: l
+  };
+  return hslObject;
 }
 
-function showColor(HEXValue) {
-  showNewColor(HEXValue);
-  showNewHEXValue(HEXValue);
-  showNewRBGValue();
-  showNewHSLValue();
+function showColor(colorValues) {
+  showNewColor(colorValues.hex);
+  showNewhexValue(colorValues.hex);
+  showNewRBGValue(colorValues.rgb);
+  showNewHSLValue(colorValues.hsl);
 }
 
 // Show new color
-function showNewColor(HEX) {
+function showNewColor(hex) {
   const colorbox = document.querySelector("#colorbox");
-  colorbox.style.setProperty("--color", HEX);
+  colorbox.style.setProperty("--color", hex);
 }
 
-// Show new HEX value
-function showNewHEXValue(HEX) {
+// Show new hex value
+function showNewhexValue(hex) {
   const hexValue = document.querySelector("#hexvalue");
-  hexValue.textContent = HEX.toUpperCase();
+  hexValue.textContent = hex.toUpperCase();
 }
 
 // Show new RBG value
-function showNewRBGValue() {
+function showNewRBGValue(rgb) {
   const rValue = document.querySelector("#rValue");
   const gValue = document.querySelector("#gValue");
   const bValue = document.querySelector("#bValue");
 
-  rValue.textContent = rgbObject.r;
-  gValue.textContent = rgbObject.g;
-  bValue.textContent = rgbObject.b;
+  rValue.textContent = rgb.r;
+  gValue.textContent = rgb.g;
+  bValue.textContent = rgb.b;
 }
 
 // Show new HSL value
-function showNewHSLValue() {
+function showNewHSLValue(hsl) {
   const hValue = document.querySelector("#hValue");
   const sValue = document.querySelector("#sValue");
   const lValue = document.querySelector("#lValue");
 
-  hValue.textContent = Math.round(hslObject.h);
-  sValue.textContent = Math.round(hslObject.s) + "%";
-  lValue.textContent = Math.round(hslObject.l) + "%";
+  hValue.textContent = Math.round(hsl.h);
+  sValue.textContent = Math.round(hsl.s) + "%";
+  lValue.textContent = Math.round(hsl.l) + "%";
 }
